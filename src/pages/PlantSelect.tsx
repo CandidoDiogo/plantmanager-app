@@ -42,7 +42,6 @@ export function PlantSelect() {
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadedAll, setLoadedAll] = useState(false);
 
   function handleEnvironmentSelected(environment: string) {
     setEnvironmentSelected(environment);
@@ -96,7 +95,7 @@ export function PlantSelect() {
 
   useEffect(() => {
     fetchPlants();
-  },[]);
+  }, []);
 
   if (loading) {
     return <Loading />;
@@ -111,6 +110,7 @@ export function PlantSelect() {
       </View>
       <View>
         <FlatList
+          keyExtractor={(item) => String(item.key)}
           data={environment}
           renderItem={({ item }) => (
             <EnvironmentButton
@@ -127,7 +127,8 @@ export function PlantSelect() {
       <View style={styles.plants}>
         <FlatList
           data={filteredPlants}
-          renderItem={({ item }) =>( <PlantCardPrimary data={item} />)}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <PlantCardPrimary data={item} />}
           showsVerticalScrollIndicator={false}
           numColumns={2}
           onEndReachedThreshold={0.1}
@@ -136,7 +137,8 @@ export function PlantSelect() {
           }
           ListFooterComponent={
             loadingMore ? <ActivityIndicator color={colors.green} /> : <></>
-          }/>
+          }
+        />
       </View>
     </View>
   );

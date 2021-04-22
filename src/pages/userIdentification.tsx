@@ -10,7 +10,9 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/core";
 import { Button } from "../components/button";
 
@@ -24,7 +26,13 @@ export function UserIdentification() {
 
   const navigation = useNavigation();
 
-  function handleConfirmation() {
+  async function handleConfirmation() {
+    if (!name) {
+      return Alert.alert(`Me diz como chamar você 😢`);
+    }
+
+    await AsyncStorage.setItem("@plantmanager:user", name);
+
     navigation.navigate("Confirmation");
   }
 
@@ -131,5 +139,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
     width: "100%",
     paddingHorizontal: 20,
+  },
+
+  error: {
+    alignItems: "center",
   },
 });
