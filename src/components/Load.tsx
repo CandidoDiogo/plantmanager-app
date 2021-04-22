@@ -14,7 +14,7 @@ export function Loading() {
         style={styles.animation}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

@@ -20,7 +20,7 @@ interface EnvironmentProps {
 }
 
 interface PlantProps {
-  id: string;
+  id: number;
   name: string;
   about: string;
   water_tips: string;
@@ -35,6 +35,7 @@ interface PlantProps {
 export function PlantSelect() {
   const [environment, setEnvironment] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>([]);
+
   const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>([]);
   const [environmentSelected, setEnvironmentSelected] = useState("all");
   const [loading, setLoading] = useState(true);
@@ -46,14 +47,11 @@ export function PlantSelect() {
   function handleEnvironmentSelected(environment: string) {
     setEnvironmentSelected(environment);
 
-    if (environment === "all") {
-      return setFilteredPlants(plants);
-    }
+    if (environment == "all") return setFilteredPlants(plants);
 
     const filtered = plants.filter((plant) =>
       plant.environments.includes(environment)
     );
-
     setFilteredPlants(filtered);
   }
 
@@ -61,6 +59,7 @@ export function PlantSelect() {
     const { data } = await api.get(
       `plants?_sort=name&_order=asc&_page=${page}&_limit=8`
     );
+
     if (!data) {
       return setLoading(true);
     }
@@ -79,29 +78,29 @@ export function PlantSelect() {
 
   function handleFetchMore(distance: number) {
     if (distance < 1) return;
-
     setLoadingMore(true);
     setPage((oldValue) => oldValue + 1);
     fetchPlants();
   }
 
   useEffect(() => {
+    async function fetchEnvironment() {
+      const { data } = await api.get(
+        `plants_environments?_sort=title&_order=asc`
+      );
+
+      setEnvironment([{ key: "all", title: "Todos" }, ...data]);
+    }
+    fetchEnvironment();
+  }, []);
+
+  useEffect(() => {
     fetchPlants();
-  });
+  },[]);
 
   if (loading) {
     return <Loading />;
   }
-
-  useEffect(() => {
-    async function fetchEnvironment() {
-      const { data } = await api.get(
-        `plants_environments?_sort=title&_order_asc`
-      );
-      setEnvironment([{ key: "all", title: "Todos" }, ...data]);
-    }
-    fetchEnvironment();
-  });
 
   return (
     <View style={styles.container}>
@@ -128,6 +127,7 @@ export function PlantSelect() {
       <View style={styles.plants}>
         <FlatList
           data={filteredPlants}
+          renderItem={({ item }) =>( <PlantCardPrimary data={item} />)}
           showsVerticalScrollIndicator={false}
           numColumns={2}
           onEndReachedThreshold={0.1}
@@ -136,9 +136,7 @@ export function PlantSelect() {
           }
           ListFooterComponent={
             loadingMore ? <ActivityIndicator color={colors.green} /> : <></>
-          }
-          renderItem={({ item }) => <PlantCardPrimary data={item} />}
-        ></FlatList>
+          }/>
       </View>
     </View>
   );
