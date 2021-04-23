@@ -14,27 +14,19 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import { SvgFromUri } from "react-native-svg";
 import { useRoute } from "@react-navigation/core";
 import { format, isBefore } from "date-fns";
+import { useState } from "react";
+import { loadPlant, PlantProps, plantSave } from "../libs/storage";
 
 import { Button } from "../components/button";
 
 import waterdrop from "../assets/waterdrop.png";
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/core";
 
 interface Params {
-  plant: {
-    id: number;
-    name: string;
-    about: string;
-    water_tips: string;
-    photo: string;
-    environments: [string];
-    frequency: {
-      times: number;
-      repeat_every: string;
-    };
-  };
+  plant: PlantProps;
 }
 
 export function PlantSave() {
@@ -43,6 +35,8 @@ export function PlantSave() {
 
   const route = useRoute();
   const { plant } = route.params as Params;
+
+  const navigation = useNavigation();
 
   function handleChangeTime(event: Event, dateTime: Date | undefined) {
     if (Platform.OS === "android") {
@@ -63,6 +57,26 @@ export function PlantSave() {
 
   function handleOpenDateTimePickerForAndroid() {
     setShowDatePicker((oldState) => !oldState);
+  }
+
+  async function handleSave() {
+    try {
+      await plantSave({
+        ...plant,
+        dateTimeNotification: selectedDateTime,
+      });
+
+      navigation.navigate("Confirmation", {
+        title: "Tudo certo",
+        subtitle:
+          "Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com bastante amor.",
+        buttonTitle: "Muito obrigado :D",
+        icon: "hug",
+        nextScreen: 'MyPlants',
+      });
+    } catch {
+      Alert.alert("Não foi possível salvar. 😢 ");
+    }
   }
 
   return (
@@ -94,10 +108,13 @@ export function PlantSave() {
             onPress={handleOpenDateTimePickerForAndroid}
             style={styles.dateTimePickerButton}
           >
-            <Text style={styles.dateTimePickerText}>{`Mudar ${format(selectedDateTime, "HH:mm")}`}</Text>
+            <Text style={styles.dateTimePickerText}>{`Mudar ${format(
+              selectedDateTime,
+              "HH:mm"
+            )}`}</Text>
           </TouchableOpacity>
         )}
-        <Button title={"Cadastrar Planta"} onPress={() => {}}></Button>
+        <Button title={"Cadastrar Planta"} onPress={handleSave}></Button>
       </View>
     </View>
   );
@@ -179,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 40,
   },
-  
+
   dateTimePickerText: {
     color: colors.heading,
     fontFamily: fonts.text,
