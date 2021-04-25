@@ -1,12 +1,12 @@
 import React from "react";
-import {Platform} from 'react-native'
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Platform } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import colors from "../styles/colors";
 import { PlantSelect } from "../pages/PlantSelect";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MyPlants } from "../pages/MyPlants";
 
-const AppTab = createBottomTabNavigator();
+const AppTab = createMaterialTopTabNavigator();
 
 const AuthRoutes = () => {
   return (
@@ -14,9 +14,8 @@ const AuthRoutes = () => {
       tabBarOptions={{
         activeTintColor: colors.green,
         inactiveTintColor: colors.heading,
-        labelPosition: "beside-icon",
         style: {
-          paddingVertical: Platform.OS === 'ios' ? 20 : 0,
+          paddingVertical: Platform.OS === "ios" ? 20 : 0,
           height: 50,
         },
       }}
@@ -25,31 +24,29 @@ const AuthRoutes = () => {
         name={"Nova Planta"}
         component={PlantSelect}
         options={{
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ focused, color }) => (
             <MaterialIcons
               name="add-circle-outline"
-              size={size}
+              focused={focused}
               color={color}
             />
           ),
         }}
       />
-       <AppTab.Screen
+      <AppTab.Screen
         name={"Minhas Planta"}
         component={MyPlants}
         options={{
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ focused, color }) => (
             <MaterialIcons
               name="format-list-bulleted"
-              size={size}
+              focused={focused}
               color={color}
             />
           ),
         }}
       />
     </AppTab.Navigator>
-
-    
   );
 };
 
