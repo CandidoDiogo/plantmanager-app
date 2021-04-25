@@ -21,7 +21,6 @@ interface EnvironmentProps {
   title: string;
 }
 
-
 export function PlantSelect() {
   const [environment, setEnvironment] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>([]);
@@ -33,7 +32,7 @@ export function PlantSelect() {
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   function handleEnvironmentSelected(environment: string) {
     setEnvironmentSelected(environment);
@@ -74,8 +73,8 @@ export function PlantSelect() {
     fetchPlants();
   }
 
-  function handlePlantSelect(plant: PlantProps){
-    navigation.navigate("PlantSave", { plant })
+  function handlePlantSelect(plant: PlantProps) {
+    navigation.navigate("PlantSave", { plant });
   }
 
   useEffect(() => {
@@ -124,7 +123,12 @@ export function PlantSelect() {
         <FlatList
           data={filteredPlants}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <PlantCardPrimary data={item} onPress={() => handlePlantSelect(item)} />}
+          renderItem={({ item }) => (
+            <PlantCardPrimary
+              data={item}
+              onPress={() => handlePlantSelect(item)}
+            />
+          )}
           showsVerticalScrollIndicator={false}
           numColumns={2}
           onEndReachedThreshold={0.1}
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     paddingBottom: 5,
-    marginLeft: 32,
+    marginLeft: 6,
     marginVertical: 32,
   },
 

@@ -6,7 +6,6 @@ import {
   View,
   Image,
   Platform,
-  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
