@@ -11,6 +11,8 @@ const AppTab = createMaterialTopTabNavigator();
 const AuthRoutes = () => {
   return (
     <AppTab.Navigator
+    tabBarPosition={"bottom"}
+    initialRouteName={"Nova Planta"}
       tabBarOptions={{
         activeTintColor: colors.green,
         inactiveTintColor: colors.heading,
