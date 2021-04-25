@@ -14,7 +14,7 @@ import { SvgFromUri } from "react-native-svg";
 import { useRoute } from "@react-navigation/core";
 import { format, isBefore } from "date-fns";
 import { useState } from "react";
-import { loadPlant, PlantProps, plantSave } from "../libs/storage";
+import { PlantProps, plantSave } from "../libs/storage";
 
 import { Button } from "../components/button";
 
