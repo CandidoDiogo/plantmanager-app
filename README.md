@@ -1,5 +1,5 @@
 # PlantManager
- ## Não se esqueça de regar mais suas plantas
+ ## Não se esqueça de mais regar suas plantas
 
 ![Logo](https://user-images.githubusercontent.com/78054220/116148501-5d54da00-a6b7-11eb-9e35-3293eee7f3ec.png)
 
